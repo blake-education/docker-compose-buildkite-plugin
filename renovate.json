@@ -1,11 +1,13 @@
 {
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "docker-compose": {
     "digest": {
       "enabled": false
     }
   },
-  "labels": ["dependencies"]
+  "labels": [
+    "dependencies"
+  ]
 }
