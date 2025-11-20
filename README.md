@@ -195,6 +195,39 @@ A list of export locations to be used to share build cache with future builds in
 
 They will be mapped directly to `cache-to` elements in the build according to the spec so any valid format there should be allowed.
 
+#### `platforms` (build only, string or array)
+
+A list of target platforms to build for when creating multi-architecture images. This option overrides any platforms specified in your docker-compose file and is particularly useful for multi-arch builds using buildx.
+
+Platforms are specified in the format `os/architecture[/variant]`, for example:
+
+- `linux/amd64`
+- `linux/arm64`
+- `linux/arm/v7`
+
+**Important**: Multi-platform images cannot be loaded into the local Docker daemon and must be pushed directly to a registry. When platforms are specified:
+
+- You **must** also configure `push` targets with registry locations
+- The plugin automatically enables push-on-build behavior
+- A builder with the `docker-container` or `remote` driver is required
+
+Example:
+
+```yaml
+steps:
+  - label: "Build multi-arch image"
+    plugins:
+      - docker-compose#v5.0.0:
+          build: app
+          push: app:myregistry/myapp:latest
+          platforms:
+            - linux/amd64
+            - linux/arm64
+          builder:
+            create: true
+            driver: docker-container
+```
+
 #### `target` (build only)
 
 Allow for intermediate builds as if building with Docker's `--target VALUE` options.
